@@ -6,25 +6,23 @@ representing the Pascal’s triangle of n
 """
 
 
-def pascal_triangle(number):
+def pascal_triangle(n):
     """ n is the length of the row
     """
-    if number <= 0:
+    if n <= 0:
         return []
 
-    tri = []
+    tri = [[1]]
 
-    for i in range(number):
-        # the first leading cell must start with 1
-        row = [1] * (i + 1)
+    for i in range(1, n):
+        # start each row initializing 1 to row
+        row = [1]
 
-        for k in range(1, i):
-            # the next row number is based on this
-            # adding the two number above
-            row[k] = tri[i - 1][k - 1] + tri[i - 1][k]
+        for j in range(1, i):
+            row.append(tri[i - 1][j - 1] + tri[i - 1][j])
 
+        # end each row with 1
+        row.append(1)
         tri.append(row)
 
     return tri
-
-
