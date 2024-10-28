@@ -9,7 +9,7 @@ import sys
 # a function that prints a status code
 def print_statictics(total_file_size: int, status_code: Dict) -> str:
     """Prints statistics and the updated count"""
-    print(f"File Size: {total_file_size}")
+    print(f"File size: {total_file_size}")
 
     for code, count in sorted(status_code.items()):
         print(f"{code}: {count}")
