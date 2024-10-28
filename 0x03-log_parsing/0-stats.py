@@ -4,6 +4,8 @@ computes metrics:
 """
 from typing import Union, Dict
 import sys
+import signal
+
 
 
 # a function that prints a status code
@@ -30,7 +32,7 @@ def parse_stdin(_input: str, status_codes) -> Union[int, str]:
                 file_size = int(file_size_str)
                 return status_code, file_size
 
-        except ValueError as e:
+        except ValueError:
             return None, None
 
 
@@ -58,12 +60,14 @@ try:
             total_file_size += file_size
             status_codes[code] += 1
 
-        if line_count % 10 == 0:
+        if line_count == 10:
             print_statictics(total_file_size, status_codes)
             line_count = 0
 except KeyboardInterrupt:
     print_statictics(total_file_size, status_codes)
-    sys.exit(0)
 
 finally:
     print_statictics(total_file_size, status_codes)
+
+
+# Override the default handler for SIGINT (Ctrl+C)
