@@ -22,7 +22,7 @@ def rotate_2d_matrix(matrix):
 
     for i in range(n):
         for j in range(n):
-            res[n - j -1][i] = matrix[i][j]
+            res[j][n - i - 1] = matrix[i][j]
 
     for i in range(n):
         for j in range(n):
