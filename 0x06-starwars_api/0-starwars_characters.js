@@ -10,30 +10,47 @@
 const request = require('request');
 const process = require('process');
 
-// url for extracting the characters in films api
-const url = `https://swapi-api.alx-tools.com/api/films/${process.argv[2]}`;
+if (process.argv.length < 3) {
+  console.error('Usage: node script.js <Movie ID>');
+  process.exit(1);
+}
+// movie url & movieId
+const movieId = process.argv[2];
+const movieUrl = `https://swapi-api.alx-tools.com/api/films/${movieId}`;
 
-// send a request using a request module
-request.get(url, (error, response, body) => {
+request.get(movieUrl, (error, response, body) => {
   if (error) {
     console.error(error);
+    return;
   }
 
-  if (response.statusCode === 200) {
+  if (response.statusCode !== 200) {
+    console.error(error);
+    return;
+  }
+
+  try {
     const data = JSON.parse(body);
 
-    data.characters.forEach((person) => {
+    const movieCharacters = data.characters;
+
+    movieCharacters.forEach((person) => {
       request.get(person, (error, response, body) => {
         if (error) {
           console.error(error);
+          return;
         }
 
         if (response.statusCode === 200) {
-          const peopleCharacter = JSON.parse(body);
+          const characterNames = JSON.parse(body);
 
-          console.log(peopleCharacter.name);
+          console.log(characterNames.name);
+        } else {
+          console.error(`Failed to fetch character details. Status code: ${response.statusCode}`);
         }
       });
     });
+  } catch (error) {
+    throw new Error(error);
   }
 });
